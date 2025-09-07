@@ -1,0 +1,14 @@
+/* Global reset + font + bg */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2d7f7;
+}
+
+/* ตัวช่วยกลางหน้าจอ */
+.container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

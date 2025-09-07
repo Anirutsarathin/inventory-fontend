@@ -1,0 +1,122 @@
+.sidebar {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Top */
+.sidebar-top {
+  background: #e8cfff;       /* ชมพูอมม่วงพาสเทล */
+  flex: 0 0 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #5a3d55;
+}
+
+/* Middle */
+.sidebar-middle {
+  background: #ffc2dc;       /* พื้นชมพูอ่อน */
+  flex: 1;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+/* Bottom */
+.sidebar-bottom {
+  background: #dddcdc;       /* ชมพูอมพีช */
+  flex: 0 0 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  color: #5a3d55;
+}
+
+/* ===== Menu ===== */
+.menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 10px;
+  flex: 1;
+}
+
+.menu-button {
+  width: 100%;
+  padding: 12px 10px;
+  background: #ffe6f0;            /* ชมพูพาสเทล */
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: #5a3d55;
+}
+
+.menu-button:hover {
+  background: #ff639a;           /* Hover → ชมพูเข้มขึ้น */
+  transform: translateY(-2px);
+}
+
+.menu-button:active {
+  transform: translateY(0);
+}
+
+/* Active button */
+.menu-button.is-active {
+  background: #f2b5d4;           /* Active → ชมพูสดกว่าหน่อย */
+  box-shadow: inset 0 0 0 2px #00000020;
+}
+
+/* Submenu */
+.submenu {
+  list-style: none;
+  margin: 8px 0 12px 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.submenu-item {
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #5a3d55;
+}
+
+.submenu-item:hover {
+  text-decoration: underline;
+  color: #c75b7a;
+}
+.sidebar-bottom {
+  background: #b9b9b9; /* ชมพูพาสเทล */
+  flex: 0 0 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.sidebar-bottom:hover {
+  background: #777777; /* hover เป็นชมพูเข้มขึ้น */
+}
+
+.sidebar-bottom svg {
+  color: #fff; /* ไอคอนสีขาว */
+}

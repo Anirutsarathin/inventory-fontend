@@ -1,0 +1,146 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2d7f7;
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-box {
+  background: #dddddd;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.login-box h1 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.login-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.password-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-box input {
+  flex: 1;
+  padding-right: 5px;
+}
+
+.password-box .toggle {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #007bff;
+  user-select: none;
+}
+
+.password-box .toggle:hover {
+  text-decoration: underline;
+}
+
+.login-box button {
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  background: #999;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-box button:hover {
+  background: #777;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.forgot {
+  text-align: right;
+  font-size: 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  color: #555;
+}
+
+/* -------- Dashboard Layout -------- */
+.dashboard {
+  display: flex;
+  height: 100vh;
+  background: black;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar-top {
+  background: #f28b82;
+  height: 10%;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 100px;
+  font-weight: bold;
+}
+
+.sidebar-middle {
+  background: #b7f5b2;
+  flex: 1; /* กินพื้นที่ที่เหลือ */
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  padding-top: 40%;
+}
+
+.sidebar-bottom {
+  background: #f28b82;
+  height: 10%;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 100px;
+  font-weight: bold;
+}
+
+.content {
+  width: 80%;
+  background: #82cfff;
+  margin-left: 5px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  padding-top: 40%;
+}

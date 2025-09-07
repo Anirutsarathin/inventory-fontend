@@ -1,0 +1,49 @@
+/* Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* ปิด scrollbar ของ body */
+  font-family: "Segoe UI", sans-serif;
+  background: #fff0f5; /* พื้นหลังชมพูอ่อนทั่วทั้งจอ */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Layout */
+.dashboard {
+  display: flex;
+  height: 100vh;   /* เต็มหน้าจอแนวตั้ง */
+  width: 100vw;    /* เต็มหน้าจอแนวนอน */
+  overflow: hidden; 
+}
+
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  background: #f8c8dc;   /* ชมพูพาสเทลอ่อน */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+}
+
+/* Content */
+.content {
+  flex: 1;
+  background: #ffe6f0;   /* ชมพูอ่อนหวาน */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 22px;
+  color: #5a3d55;        /* ชมพูเข้มอ่านง่าย */
+  overflow: auto;        /* scroll เฉพาะข้างใน content */
+}
+
+/* Optional: เพิ่ม Gradient เบา ๆ ให้ดูพรีเมียม */
+.content {
+  background: linear-gradient(135deg, #ffe6f0, #f8c8dc);
+}
