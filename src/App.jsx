@@ -8,6 +8,7 @@ import Employees from "./pages/Employees.jsx";
 import Layout from "./pages/Layout.jsx";
 import Managerole from "./pages/Managerole.jsx";
 import Chemical_master from "./pages/Chemical_master.jsx";
+import Chemical_stock from "./pages/Chemical_stock.jsx";
 
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
           <Route element={<Layout onLogout={handleLogout} />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/chemical/master" element={<Chemical_master/>} />
-            <Route path="/chemical/stock-in" element={<h2>Stock In</h2>} />
+            <Route path="/chemical/stock-in" element={<Chemical_stock/>} />
             <Route path="/chemical/count" element={<h2>Count</h2>} />
             <Route path="/chemical/destroy" element={<h2>Destroy</h2>} />
             <Route path="/document" element={<h2>Document</h2>} />

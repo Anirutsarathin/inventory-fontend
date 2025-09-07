@@ -60,7 +60,8 @@
 
 .password-box input {
   flex: 1;
-  padding-right: 40px;
+  padding-right: 5x;
+
 }
 
 .password-box .toggle {
@@ -109,4 +110,9 @@
 
 .forgot:hover {
   color: #f497b6;
+}
+
+.my-swal-popup {
+  font-size: 14px;
+
 }

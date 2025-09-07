@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 
 export default function ComponentShow({ data, columns }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 13;
+  const rowsPerPage = 10;
   const [searchTerm, setSearchTerm] = useState("");
 
   // ✅ Sort + Filter

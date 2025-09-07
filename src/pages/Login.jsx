@@ -19,14 +19,20 @@ const handleSubmit = async (e) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
-        user: username,   // 👈 เปลี่ยน key เป็น user
+        user: username,
         password: password 
       }),
     });
 
     if (!res.ok) {
-      const errData = await res.json();
-      setError(errData.message || "Login failed");
+      if (res.status === 401) {
+        setError("User or password incorrect");
+      } else if (res.status === 403) {
+        setError("⚠️ Account suspended");
+      } else {
+        const errData = await res.json();
+        setError(errData.message || "User or password incorrect");
+      }
       return;
     }
 
@@ -54,7 +60,7 @@ const handleSubmit = async (e) => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Username"
+            placeholder="Phone or Email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />

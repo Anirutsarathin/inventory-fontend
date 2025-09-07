@@ -4,12 +4,12 @@
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 .rectangle {
   width: 90%;              /* ⬅️ เดิม 60% → เพิ่มเป็น 90% ของจอ */
-  height: 800px;           /* ⬅️ เดิม 500px → เพิ่มความสูง */
+  height: 700px;           /* ⬅️ เดิม 500px → เพิ่มความสูง */
   background: #f497b6;
   padding: 0;
   border-radius: 6px;
@@ -124,4 +124,60 @@
 
 .add-button:hover {
   background: #96dfa4;   /* เขียวเข้มเวลา hover */
+}
+/* --------------Chemical_stock----------- */
+.form-chemical {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* ระยะห่างระหว่าง input แต่ละอัน */
+  padding: 0px 100px; /* ✅ ขยับเข้ามา ไม่ติดขอบ */
+}
+
+.form-chemical label {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;   /* ✅ ขยายตัวอักษร label */
+  font-weight: 600;
+  color: #333;
+}
+
+.form-chemical input {
+  padding: 10px 12px;       /* ✅ ช่อง input ใหญ่ขึ้น */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 1px;
+  font-size: 14px;          /* ✅ ตัวอักษรใน input ใหญ่ขึ้น */
+}
+
+.submit-btn {
+  margin-top: 10px;
+  padding: 14px 20px;     /* ✅ ขยายพื้นที่ปุ่ม */
+  font-size: 18px;        /* ✅ ขยายขนาดตัวอักษร */
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;     /* ✅ มุมโค้งใหญ่ขึ้นนิดหน่อย */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;            /* ✅ กินเต็มแถว */
+  max-width: 400px;       /* ✅ จำกัดไม่ให้กว้างเกินไป */
+  align-self: center;     /* ✅ จัดตรงกลางฟอร์ม */
+}
+.submit-btn:hover {
+  background: #218838;
+}
+.my-swal-popup {
+  position: absolute !important;
+  top: 0%;     /* 👈 ปรับเองได้ */
+  right: 30%;  /* 👈 ปรับเองได้ */
+}
+.form-chemical select {
+  padding: 10px 12px;      /* ✅ เพิ่มความสูงเหมือน input */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 6px;
+  font-size: 17px;         /* ✅ ขยายขนาดตัวอักษร */
+  background-color: #fff;  /* ✅ ให้ select เป็นพื้นขาว */
+  cursor: pointer;
 }

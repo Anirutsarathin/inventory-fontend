@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/sidebar.css";
 import { FiLogOut } from "react-icons/fi"; 
 
+
 const MENU = [
   { name: "Dashboard", path: "/dashboard", children: [] },
   { 
