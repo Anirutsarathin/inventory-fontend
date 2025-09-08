@@ -2,7 +2,7 @@ import "../styles/component_show.css";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useState, useMemo } from "react";
 
-export default function ComponentShow({ data, columns }) {
+export default function ComponentShow({ data, columns, onAdd }) {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
   const [searchTerm, setSearchTerm] = useState("");
@@ -11,10 +11,8 @@ export default function ComponentShow({ data, columns }) {
   const filteredData = useMemo(() => {
     return (
       data
-        // sort asc ตาม name
         .slice()
-        .sort((a, b) => a.name.localeCompare(b.name))
-        // filter เฉพาะ name และ type
+        .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
         .filter(
           (row) =>
             row.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -31,30 +29,31 @@ export default function ComponentShow({ data, columns }) {
 
   return (
     <div className="table-wrapper">
-      {/* Search Box */}
-    <div className="table-header">
-  {/* กล่อง search อยู่ด้านซ้าย */}
-  <div className="search-box">
-    <input
-      type="text"
-      placeholder="Search name or type..."
-      value={searchTerm}
-      onChange={(e) => {
-        setSearchTerm(e.target.value);
-        setCurrentPage(1);
-      }}
-    />
-  </div>
+      {/* Header (Search + Add) */}
+      <div className="table-header">
+        {/* Search box */}
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Search name or type..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
 
-  {/* ปุ่ม Add อยู่ด้านขวา */}
-  <button
-    className="add-button"
-    onClick={() => alert("Add new item")}
-  >
-    +
-  </button>
-</div>
+        {/* ปุ่ม Add */}
+        <button
+          className="add-button"
+          onClick={onAdd} // ✅ ใช้ฟังก์ชันจาก parent
+        >
+          +
+        </button>
+      </div>
 
+      {/* Table */}
       <table className="custom-table">
         <thead>
           <tr>
