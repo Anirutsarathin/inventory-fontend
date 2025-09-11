@@ -29,12 +29,20 @@ export default function Employees() {
 
         const result = await res.json();
 
-        // ✅ Map API → Table format ให้ตรงกับ ComponentShow
+        // ✅ เก็บ id ด้วย
         const mappedData = (result.employees || []).map((e) => ({
+          id: e.employee_id,
+          first_name: e.first_name,
+          last_name: e.last_name,
           name: e.name,
-          position: e.position,
-          status: e.status,
+          position_id: e.position_id,   // ต้องเก็บ id ไว้ใช้ตอน update
+          position: e.position,         // ชื่อ position ไว้โชว์
+          phone: e.phone,
+          status: e.status,               // เก็บตัวเลข
+          status_label: e.status_label,   // เก็บ label
+
         }));
+
 
         setData(mappedData);
       } catch (err) {
@@ -46,11 +54,11 @@ export default function Employees() {
     fetchEmployees();
   }, []);
 
-  // ✅ กำหนด columns สำหรับ Table
   const columns = [
     { Header: "Name", accessor: "name" },
     { Header: "Position", accessor: "position" },
-    { Header: "Status", accessor: "status" },
+    { Header: "Phone", accessor: "phone" },
+    { Header: "Status", accessor: "status_label" },
   ];
 
   return (
@@ -59,7 +67,24 @@ export default function Employees() {
         {error ? (
           <p className="error">{error}</p>
         ) : (
-          <ComponentShow data={data} columns={columns} />
+<ComponentShow
+  data={data}
+  columns={columns}
+  onUpdate={(updated) => {
+    if (updated._delete) {
+      // ✅ ลบจาก state
+      setData((prev) => prev.filter((row) => row.id !== updated.id));
+    } else {
+      // ✅ แก้ไขจาก state
+      setData((prev) =>
+        prev.map((row) =>
+          row.id === updated.id ? { ...row, ...updated } : row
+        )
+      );
+    }
+  }}
+/>
+
         )}
       </div>
     </div>
