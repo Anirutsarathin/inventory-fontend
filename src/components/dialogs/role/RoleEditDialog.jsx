@@ -27,15 +27,16 @@ export default function RoleEditDialog({ row, pages, onClose, onSuccess }) {
   const toggle = (pid) =>
     setSelected((prev) => ({ ...prev, [pid]: !prev[pid] }));
 
-  const handleSave = async () => {
-    const position_id = row.id;
-    const selectedPageIds = Object.keys(selected)
-      .filter((k) => selected[k])
-      .map((k) => Number(k));
+ const handleSave = async () => {
+  const position_id = row.id;  // 👈 ใช้ชื่อนี้
+    console.log("position_id to save:", position_id); // debug
+  const selectedPageIds = Object.keys(selected)
+    .filter((k) => selected[k])
+    .map((k) => Number(k));
 
     try {
       const token = localStorage.getItem("auth_token");
-
+       console.log("edit row:", row);
       // 1) ล้างสิทธิ์เดิมทั้งหมดของตำแหน่งนี้
       const delRes = await fetch(
         `http://localhost:3000/api/permissions/position/${position_id}`,

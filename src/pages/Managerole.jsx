@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import ComponentShow from "../components/ComponentShow";
+import RoleAddDialog from "../components/dialogs/role/RoleAddDialog";   // ✅ import
 import RoleEditDialog from "../components/dialogs/role/RoleEditDialog";
+import RoleDeleteDialog from "../components/dialogs/role/RoleDeleteDialog";
 import Swal from "sweetalert2";
 
 export default function Managerole() {
@@ -8,7 +10,9 @@ export default function Managerole() {
   const [positions, setPositions] = useState([]);
   const [pages, setPages] = useState([]);
   const [error, setError] = useState("");
-  const [editRow, setEditRow] = useState(null); // ✅ state edit
+  const [showAdd, setShowAdd] = useState(false);  // ✅ state add
+  const [editRow, setEditRow] = useState(null); 
+  const [deleteRow, setDeleteRow] = useState(null);
 
   // โหลด role/position/page
   useEffect(() => {
@@ -29,7 +33,7 @@ export default function Managerole() {
       (result.roles || []).forEach((r) => {
         if (!grouped[r.position_name]) {
           grouped[r.position_name] = {
-            id: r.position_id,     // ✅ เก็บ id ด้วย
+            id: r.position_id, // ✅ ใช้ id ตรงกันกับ Add/Edit/Delete
             name: r.position_name,
             dashboard: "❌",
             chemical: "❌",
@@ -56,7 +60,7 @@ export default function Managerole() {
   const fetchPositions = async () => {
     try {
       const token = localStorage.getItem("auth_token");
-      const res = await fetch("http://localhost:3000/api/employees/position", {
+      const res = await fetch("http://localhost:3000/api/employees/position/role", {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
       const result = await res.json();
@@ -89,6 +93,37 @@ export default function Managerole() {
     { Header: "Page Admin", accessor: "admin" },
   ];
 
+  // ✅ ลบ role
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("auth_token");
+      const res = await fetch(`http://localhost:3000/api/permissions/position/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        alert(result.error || "Delete failed");
+        return;
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "ลบสิทธิ์ตำแหน่งเรียบร้อย ✅",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      setDeleteRow(null);
+      fetchRoles();
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Server error, please try again later.");
+    }
+  };
+
   return (
     <div className="table-container">
       <div className="rectangle">
@@ -99,9 +134,25 @@ export default function Managerole() {
             <ComponentShow
               data={data}
               columns={columns}
-              onEdit={(row) => setEditRow(row)} // ✅ ใช้งาน edit
+              onAdd={() => setShowAdd(true)}       // ✅ ใช้งาน Add
+              onEdit={(row) => setEditRow(row)}
+              onDelete={(row) => setDeleteRow(row)}
             />
 
+            {/* Add */}
+            {showAdd && (
+              <RoleAddDialog
+                positions={positions}
+                pages={pages}
+                onClose={() => setShowAdd(false)}
+                onSuccess={() => {
+                  setShowAdd(false);
+                  fetchRoles();
+                }}
+              />
+            )}
+
+            {/* Edit */}
             {editRow && (
               <RoleEditDialog
                 row={editRow}
@@ -109,8 +160,17 @@ export default function Managerole() {
                 onClose={() => setEditRow(null)}
                 onSuccess={() => {
                   setEditRow(null);
-                  fetchRoles(); // โหลดใหม่
+                  fetchRoles();
                 }}
+              />
+            )}
+
+            {/* Delete */}
+            {deleteRow && (
+              <RoleDeleteDialog
+                row={deleteRow}
+                onClose={() => setDeleteRow(null)}
+                onConfirm={handleDelete}
               />
             )}
           </>

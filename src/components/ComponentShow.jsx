@@ -30,26 +30,26 @@ export default function ComponentShow({ data, columns, onAdd, onEdit, onDelete }
   return (
     <div className="table-wrapper">
       {/* Header (Search + Add) */}
-<div className="table-header">
-  <div className="search-box">
-    <input
-      type="text"
-      placeholder="Search..."
-      value={searchTerm}
-      onChange={(e) => {
-        setSearchTerm(e.target.value);
-        setCurrentPage(1);
-      }}
-    />
-  </div>
+      <div className="table-header">
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
 
-  {/* ✅ แสดงปุ่ม Add เฉพาะถ้ามี onAdd */}
-  {onAdd && (
-    <button className="add-button" onClick={onAdd}>
-      +
-    </button>
-  )}
-</div>
+        {/* ✅ แสดงปุ่ม Add เฉพาะถ้ามี onAdd */}
+        {onAdd && (
+          <button className="add-button" onClick={onAdd}>
+            +
+          </button>
+        )}
+      </div>
 
       <table className="custom-table">
         <thead>
@@ -58,29 +58,35 @@ export default function ComponentShow({ data, columns, onAdd, onEdit, onDelete }
             {columns.map((col, idx) => (
               <th key={idx}>{col.Header}</th>
             ))}
-            <th>EDIT</th>
-            <th>DELETE</th>
+            {/* ✅ เงื่อนไข แสดงเฉพาะเมื่อส่ง props มา */}
+            {onEdit && <th>EDIT</th>}
+            {onDelete && <th>DELETE</th>}
           </tr>
         </thead>
         <tbody>
           {currentData.length > 0 ? (
             currentData.map((row, idx) => (
-              <tr key={row.id}>
+              <tr key={row.id || idx}>
                 <td>{indexOfFirst + idx + 1}</td>
                 {columns.map((col, cIdx) => (
                   <td key={cIdx}>{row[col.accessor]}</td>
                 ))}
-                <td className="action-icons">
-                 <FiEdit title="Edit" onClick={() => onEdit?.(row)} />
-                </td>
-                <td className="action-icons">
-                 <FiTrash2 title="Delete" onClick={() => onDelete?.(row)} />
-                </td>
+                {/* ✅ เงื่อนไข แสดงเฉพาะเมื่อส่ง props มา */}
+                {onEdit && (
+                  <td className="action-icons">
+                    <FiEdit title="Edit" onClick={() => onEdit(row)} />
+                  </td>
+                )}
+                {onDelete && (
+                  <td className="action-icons">
+                    <FiTrash2 title="Delete" onClick={() => onDelete(row)} />
+                  </td>
+                )}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={columns.length + 3} style={{ textAlign: "center" }}>
+              <td colSpan={columns.length + (onEdit ? 1 : 0) + (onDelete ? 1 : 0) + 1} style={{ textAlign: "center" }}>
                 ❌ No results found
               </td>
             </tr>

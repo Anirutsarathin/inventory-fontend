@@ -1,70 +1,69 @@
 import { useState, useEffect } from "react";
 import ComponentShow from "../components/ComponentShow";
+import ChemicalTagButton from "../components/chemical/ChemicalTagButton";
+import ChemicalDeleteButton from "../components/chemical/ChemicalDeleteButton";
+import ChemicalEditButton from "../components/chemical/ChemicalEditButton"; // 👈 import
 
 export default function Chemical_master() {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchChemicals = async () => {
-      try {
-        const token = localStorage.getItem("auth_token");
-        if (!token) {
-          setError("No token found, please login.");
-          return;
-        }
-
-        const res = await fetch("http://localhost:3000/api/chemicals/all", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) {
-          const errData = await res.json();
-          setError(errData.error || "Failed to fetch chemicals");
-          return;
-        }
-
-        const result = await res.json();
-
-        // ✅ Map API → Table format
-        const mappedData = (result.chemicals || []).map((c) => ({
-          name: c.chemical_name,
-          id: c.chemical_id,
-          type: c.chemical_type,
-          quantity: c.quantity,
-          unit: "g", // 👈 default unit
-                    tag: (
-            <button
-              onClick={() => alert(`QR for ${c.chemical_id}`)}
-              style={{
-                padding: "2px 2px",
-                background: "#f497b6",
-                color: "#fff",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              QR
-            </button>
-          ),
-          expiry: c.expiry_date,
-        }));
-
-        setData(mappedData);
-      } catch (err) {
-        console.error("Fetch chemicals error:", err);
-        setError("Server error, please try again later.");
+  const fetchChemicals = async () => {
+    try {
+      const token = localStorage.getItem("auth_token");
+      if (!token) {
+        setError("No token found, please login.");
+        return;
       }
-    };
 
+      const res = await fetch("http://localhost:3000/api/chemicals/all", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        setError(errData.error || "Failed to fetch chemicals");
+        return;
+      }
+
+      const result = await res.json();
+
+      const mappedData = (result.chemicals || []).map((c) => ({
+        name: c.chemical_name,
+        id: c.chemical_id,
+        type: c.chemical_type,
+        quantity: c.quantity,
+        unit: "g",
+        expiry: c.expiry_date,
+        tag: <ChemicalTagButton chemical={c} />,
+        edit: (
+          <ChemicalEditButton
+            chemical={c}
+            onEdited={() => fetchChemicals()} // refresh หลัง edit
+          />
+        ),
+        delete: (
+          <ChemicalDeleteButton
+            chemicalId={c.chemical_id}
+            onDeleted={() => fetchChemicals()} // refresh หลังลบ
+          />
+        ),
+      }));
+
+      setData(mappedData);
+    } catch (err) {
+      console.error("Fetch chemicals error:", err);
+      setError("Server error, please try again later.");
+    }
+  };
+
+  useEffect(() => {
     fetchChemicals();
   }, []);
 
-  // ✅ กำหนด columns สำหรับ Table
   const columns = [
     { Header: "Name", accessor: "name" },
     { Header: "Id", accessor: "id" },
@@ -73,6 +72,8 @@ export default function Chemical_master() {
     { Header: "Unit", accessor: "unit" },
     { Header: "Expiry", accessor: "expiry" },
     { Header: "Tag", accessor: "tag" },
+    { Header: "Edit", accessor: "edit" }, // 👈 เพิ่มคอลัมน์ Edit
+    { Header: "Delete", accessor: "delete" },
   ];
 
   return (
