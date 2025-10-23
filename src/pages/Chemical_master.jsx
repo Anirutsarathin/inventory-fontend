@@ -1,34 +1,20 @@
 import { useState, useEffect } from "react";
 import ComponentShow from "../components/ComponentShow";
-import ChemicalTagButton from "../components/chemical/ChemicalTagButton";
-import ChemicalDeleteButton from "../components/chemical/ChemicalDeleteButton";
-import ChemicalEditButton from "../components/chemical/ChemicalEditButton"; // 👈 import
+import ChemicalTagButton from "../components/dialogs/chemical/ChemicalTagButton";
+import ChemicalEditButton from "../components/dialogs/chemical/ChemicalEditButton";
+import ChemicalDeleteDialog from "../components/dialogs/chemical/ChemicalDeleteButton"; // 👈 import ใหม่
 
 export default function Chemical_master() {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
+  const [selectedChemical, setSelectedChemical] = useState(null); // 👈 state สำหรับ Dialog
 
   const fetchChemicals = async () => {
     try {
       const token = localStorage.getItem("auth_token");
-      if (!token) {
-        setError("No token found, please login.");
-        return;
-      }
-
       const res = await fetch("http://localhost:3000/api/chemicals/all", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (!res.ok) {
-        const errData = await res.json();
-        setError(errData.error || "Failed to fetch chemicals");
-        return;
-      }
-
       const result = await res.json();
 
       const mappedData = (result.chemicals || []).map((c) => ({
@@ -42,14 +28,33 @@ export default function Chemical_master() {
         edit: (
           <ChemicalEditButton
             chemical={c}
-            onEdited={() => fetchChemicals()} // refresh หลัง edit
+            onEdited={() => fetchChemicals()}
           />
         ),
         delete: (
-          <ChemicalDeleteButton
-            chemicalId={c.chemical_id}
-            onDeleted={() => fetchChemicals()} // refresh หลังลบ
-          />
+          <button
+            onClick={() =>
+              setSelectedChemical({
+                chemical_id: c.chemical_id,
+                chemical_name: c.chemical_name,
+              })
+            }
+            style={{
+              background: "#d9534f",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              padding: "3px 8px",
+              cursor: "pointer",
+              fontSize: "13px",
+              fontWeight: "300",
+              transition: "0.2s",
+            }}
+            onMouseEnter={(e) => (e.target.style.background = "#c9302c")}
+            onMouseLeave={(e) => (e.target.style.background = "#d9534f")}
+          >
+            Delete
+          </button>
         ),
       }));
 
@@ -72,7 +77,7 @@ export default function Chemical_master() {
     { Header: "Unit", accessor: "unit" },
     { Header: "Expiry", accessor: "expiry" },
     { Header: "Tag", accessor: "tag" },
-    { Header: "Edit", accessor: "edit" }, // 👈 เพิ่มคอลัมน์ Edit
+    { Header: "Edit", accessor: "edit" },
     { Header: "Delete", accessor: "delete" },
   ];
 
@@ -82,7 +87,24 @@ export default function Chemical_master() {
         {error ? (
           <p className="error">{error}</p>
         ) : (
-          <ComponentShow data={data} columns={columns} />
+          <>
+            <ComponentShow data={data} columns={columns} />
+            {/* 🔹 Dialog แสดงเมื่อเลือกสารเคมี */}
+            {selectedChemical && (
+              <ChemicalDeleteDialog
+                row={selectedChemical}
+                onClose={() => setSelectedChemical(null)}
+                onConfirm={async (id) => {
+                  const token = localStorage.getItem("auth_token");
+                  await fetch(`http://localhost:3000/api/chemicals/${id}`, {
+                    method: "DELETE",
+                    headers: { Authorization: `Bearer ${token}` },
+                  });
+                  fetchChemicals();
+                }}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

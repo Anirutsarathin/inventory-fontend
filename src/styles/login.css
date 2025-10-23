@@ -1,57 +1,148 @@
-/* ===== Layout ให้อยู่กึ่งกลางจอ ===== */
+/* ============================================= */
+/* ===== Layout ให้อยู่กึ่งกลางจอ (พื้นหลัง) ===== */
+/* ============================================= */
 .container {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center; /* กลางแนวนอน */
-  align-items: center;     /* กลางแนวตั้ง */
-  background: linear-gradient(135deg, #fde2e4, #fad2e1); /* พาสเทลชมพู */
-  font-family: 'Arial', sans-serif;
+  height: 100vh;                   /* สูงเต็มหน้าจอแนวตั้ง */
+  width: 100vw;                    /* กว้างเต็มหน้าจอแนวนอน */
+  display: flex;                   /* ใช้ Flexbox จัดตำแหน่ง */
+  justify-content: center;         /* จัดกึ่งกลางแนวนอน */
+  align-items: center;             /* จัดกึ่งกลางแนวตั้ง */
+  background: linear-gradient(135deg, #fde2e4, #fad2e1); /* พื้นหลังไล่สีชมพูพาสเทล */
+  font-family: 'Arial', sans-serif; /* ฟอนต์อ่านง่าย */
 }
 
-/* ===== Login Box ===== */
+/* ============================================= */
+/* ===== กล่อง Login หลัก ===== */
+/* ============================================= */
 .login-box {
-  background: #fffafa; /* ขาวอมชมพู */
-  padding: 40px 30px;
-  border-radius: 15px;
-  text-align: center;
-  width: 320px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  background: #fffafa;             /* สีขาวอมชมพูอ่อน */
+  padding: 40px 30px;              /* ระยะห่างภายใน */
+  border-radius: 15px;             /* มุมโค้งมน */
+  text-align: center;              /* จัดข้อความให้อยู่กลาง */
+  width: 320px;                    /* ความกว้างของกล่อง */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15); /* เงาให้กล่องลอยขึ้น */
 }
 
-/* ===== Title ===== */
+/* ============================================= */
+/* ===== ส่วนหัวของกล่อง (Title) ===== */
+/* ============================================= */
 .login-box h1 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 25px;
-  color: #444;
-  line-height: 1.4;
+  font-size: 18px;                 /* ขนาดตัวอักษรหัวข้อ */
+  font-weight: bold;               /* ตัวหนา */
+  margin-bottom: 25px;             /* ระยะห่างด้านล่าง */
+  color: #444;                     /* สีเทาเข้ม */
+  line-height: 1.4;                /* ระยะบรรทัด */
 }
 
-/* ===== Form ===== */
+/* ============================================= */
+/* ===== ส่วนฟอร์ม (Input + Button) ===== */
+/* ============================================= */
 .login-box form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  display: flex;                   /* ใช้ Flexbox */
+  flex-direction: column;          /* วางแนวตั้ง */
+  gap: 15px;                       /* ระยะห่างระหว่าง element */
 }
 
-/* ===== Input ===== */
+/* ============================================= */
+/* ===== กล่อง Input (ช่องกรอกข้อมูลทั่วไป) ===== */
+/* ============================================= */
 .login-box input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #f8b4c4; /* ขอบชมพูอ่อน */
-  border-radius: 8px;
-  font-size: 14px;
-  transition: all 0.2s ease;
+  width: 100%;                     /* กว้างเต็มพื้นที่กล่อง */
+  padding: 12px;                   /* ระยะภายในช่อง */
+  border: 1px solid #f8b4c4;       /* ขอบชมพูอ่อน */
+  border-radius: 8px;              /* มุมโค้งมน */
+  font-size: 14px;                 /* ขนาดฟอนต์ */
+  transition: all 0.2s ease;       /* เอฟเฟกต์เวลา focus */
 }
 
+/* เอฟเฟกต์เมื่อโฟกัสช่อง input */
 .login-box input:focus {
-  outline: none;
-  border-color: #f497b6;        /* ชมพูเข้มขึ้น */
-  box-shadow: 0 0 6px rgba(244, 151, 182, 0.5);
+  outline: none;                   /* เอาขอบ default ของ browser ออก */
+  border-color: #f497b6;           /* เปลี่ยนขอบเป็นชมพูเข้ม */
+  box-shadow: 0 0 6px rgba(244, 151, 182, 0.5); /* เพิ่มเงาชมพูรอบช่อง */
 }
 
-/* ===== Password Box ===== */
+/* ============================================= */
+/* ===== ช่องกรอกรหัสผ่าน (มีไอคอน toggle) ===== */
+/* ============================================= */
+.password-box {
+  position: relative;              /* เพื่อให้วางปุ่ม toggle ทับด้านในได้ */
+  display: flex;
+  align-items: center;
+}
+
+.password-box input {
+  flex: 1;                         /* ช่อง input กินพื้นที่เท่าที่เหลือ */
+  padding-right: 5px;              /* เพิ่มช่องว่างด้านขวาเล็กน้อย */
+}
+
+/* ปุ่ม toggle สำหรับแสดง/ซ่อนรหัสผ่าน */
+.password-box .toggle {
+  position: absolute;              /* จัดตำแหน่งทับในช่อง input */
+  right: 6px;                      /* ชิดขวา 6px */
+  cursor: pointer;                 /* เปลี่ยนเคอร์เซอร์เป็นมือ */
+  font-size: 13px;                 /* ขนาดไอคอนหรือข้อความ */
+  color: #f497b6;                  /* สีชมพู */
+  user-select: none;               /* ป้องกันการลากเลือกข้อความ */
+}
+
+/* เอฟเฟกต์ hover ปุ่ม toggle */
+.password-box .toggle:hover { 
+  text-decoration: underline;      /* ขีดเส้นใต้เมื่อ hover */
+}
+
+/* ============================================= */
+/* ===== ปุ่ม LOG IN ===== */
+/* ============================================= */
+.login-box button {
+  padding: 12px;                   /* ขนาดปุ่ม */
+  font-size: 14px;                 /* ขนาดฟอนต์ */
+  font-weight: bold;               /* ตัวหนา */
+  background: #ff4a74;             /* สีชมพูเข้ม */
+  color: white;                    /* ตัวอักษรสีขาว */
+  border: none;                    /* ไม่มีเส้นขอบ */
+  border-radius: 8px;              /* มุมโค้งมน */
+  cursor: pointer;                 /* เปลี่ยนเป็นรูปมือ */
+  transition: background 0.2s ease;/* เอฟเฟกต์เปลี่ยนสีเวลา hover */
+}
+
+/* เอฟเฟกต์เมื่อเอาเมาส์ชี้ปุ่ม */
+.login-box button:hover {
+  background: #ffa9c6;             /* ชมพูอ่อนลงเมื่อ hover */
+}
+
+/* ============================================= */
+/* ===== ข้อความแจ้ง Error ===== */
+/* ============================================= */
+.error {
+  color: #e63946;                  /* สีแดงสด */
+  font-size: 13px;                 /* ขนาดฟอนต์เล็ก */
+  margin-top: -5px;                /* ขยับขึ้นเล็กน้อยให้ชิดช่อง input */
+}
+
+/* ============================================= */
+/* ===== ลิงก์ "Forgot Password" ===== */
+/* ============================================= */
+.forgot {
+  text-align: right;               /* ชิดขวา */
+  font-size: 12px;                 /* ฟอนต์เล็ก */
+  margin-top: 12px;                /* ระยะห่างด้านบน */
+  cursor: pointer;                 /* เคอร์เซอร์เป็นมือ */
+  color: #666;                     /* สีเทากลาง */
+}
+
+/* เอฟเฟกต์ hover สำหรับลิงก์ forgot */
+.forgot:hover {
+  color: #f497b6;                  /* เปลี่ยนเป็นสีชมพูเมื่อ hover */
+}
+
+/* ============================================= */
+/* ===== SweetAlert Popup Style (swal.fire) ===== */
+/* ============================================= */
+.my-swal-popup {
+  font-size: 14px;                 /* กำหนดขนาดฟอนต์ใน popup */
+}
+
 .password-box {
   position: relative;
   display: flex;
@@ -60,59 +151,22 @@
 
 .password-box input {
   flex: 1;
-  padding-right: 5x;
-
+  padding-right: 32px; /* เพิ่มช่องว่างให้ไอคอนอยู่ขวาสุด */
 }
 
+/* ปุ่ม toggle ไอคอนตา */
 .password-box .toggle {
   position: absolute;
-  right: 6px;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
-  font-size: 13px;
-  color: #f497b6;
-  user-select: none;
+  font-size: 20px; /* ขนาดไอคอน */
+  color: #f497b6; /* สีชมพูพาสเทลเข้ากับธีม */
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.password-box .toggle:hover { text-decoration: underline; }
-
-/* ===== Button ===== */
-.login-box button {
-  padding: 12px;
-  font-size: 14px;
-  font-weight: bold;
-  background: #ff4a74;   /* ปุ่มชมพูอ่อน */
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.login-box button:hover {
-  background: #ffa9c6;   /* ชมพูเข้ม */
-}
-
-/* ===== Error ===== */
-.error {
-  color: #e63946; 
-  font-size: 13px;
-  margin-top: -5px;
-}
-
-/* ===== Forgot Link ===== */
-.forgot {
-  text-align: right;
-  font-size: 12px;
-  margin-top: 12px;
-  cursor: pointer;
-  color: #666;
-}
-
-.forgot:hover {
-  color: #f497b6;
-}
-
-.my-swal-popup {
-  font-size: 14px;
-
+.password-box .toggle:hover {
+  color: #ff4a74;
+  transform: translateY(-50%) scale(1.1);
 }

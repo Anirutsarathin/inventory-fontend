@@ -110,7 +110,7 @@ export default function Managerole() {
 
       Swal.fire({
         icon: "success",
-        title: "Success",
+        title: "Delete Role Success",
         text: "ลบสิทธิ์ตำแหน่งเรียบร้อย ✅",
         timer: 2000,
         showConfirmButton: false,
