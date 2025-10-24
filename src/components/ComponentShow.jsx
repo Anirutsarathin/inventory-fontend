@@ -1,63 +1,86 @@
+
+
 // 📁 src/components/ComponentShow.jsx
-import "../styles/component_show.css"; // ✅ นำเข้าไฟล์ CSS สำหรับตกแต่งตาราง
-import { FiEdit, FiTrash2 } from "react-icons/fi"; // ✅ นำเข้า icon แก้ไขและลบจาก react-icons
-import { useState, useMemo } from "react"; // ✅ ใช้ useState และ useMemo สำหรับจัดการ state และประสิทธิภาพ
+import "../styles/component_show.css";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { useState, useMemo } from "react";
 
-// ✅ Component หลัก ใช้แสดงตารางข้อมูลทั่วไป พร้อม search / pagination / edit / delete
-export default function ComponentShow({ data, columns, onAdd, onEdit, onDelete }) {
+/**
+ * 🔹 ComponentShow (Reusable Table)
+ * ใช้แสดงตารางข้อมูลพร้อม Search + Pagination + ปุ่ม Add/Edit/Delete (ตาม props)
+ *
+ * ✅ รองรับการส่ง rowsPerPage (จำนวนข้อมูลต่อหน้า)
+ * ✅ สามารถค้นหาทุกคอลัมน์
+ * ✅ ใช้ได้ทุกหน้า เช่น Employees, History, Chemical
+ */
+export default function ComponentShow({
+  data = [],
+  columns = [],
+  onAdd,
+  onEdit,
+  onDelete,
+  rowsPerPage = 10, // 🧮 ค่าเริ่มต้น = 10 แถวต่อหน้า (สามารถส่งค่าใหม่จากหน้าอื่นได้)
+}) {
   // ---------------------------------------------------------------
-  // 🔹 State & Constant
+  // 🔹 State
   // ---------------------------------------------------------------
-  const [currentPage, setCurrentPage] = useState(1); // เก็บหน้าปัจจุบันของตาราง
-  const [searchTerm, setSearchTerm] = useState(""); // เก็บคำค้นหา
-  const rowsPerPage = 10; // จำนวนแถวต่อหน้า
+  const [currentPage, setCurrentPage] = useState(1); // หน้าแสดงผลปัจจุบัน
+  const [searchTerm, setSearchTerm] = useState(""); // คำค้นหาในช่อง search
 
   // ---------------------------------------------------------------
-  // 🔹 filter & sort (useMemo เพื่อไม่คำนวณซ้ำเมื่อไม่จำเป็น)
+  // 🔹 Filter + Search + Sort
   // ---------------------------------------------------------------
   const filteredData = useMemo(() => {
+    if (!data || data.length === 0) return [];
+
     return (
       data
-        .slice() // clone array เพื่อไม่ให้กระทบต้นฉบับ
-        .sort((a, b) => (a.name || "").localeCompare(b.name || "")) // เรียงตามชื่อ
-        .filter(
-          (row) =>
-            // กรองเฉพาะข้อมูลที่มีคำค้นใน name หรือ position
-            row.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            row.position?.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+        .slice()
+        // 🔸 เรียงตามชื่อถ้ามี field name
+        .sort((a, b) => {
+          if (a.name && b.name) return a.name.localeCompare(b.name);
+          return 0;
+        })
+        // 🔸 กรองทุกคอลัมน์ตามคำค้น
+        .filter((row) => {
+          if (!searchTerm) return true;
+          const allValues = Object.values(row)
+            .join(" ")
+            .toLowerCase();
+          return allValues.includes(searchTerm.toLowerCase());
+        })
     );
-  }, [data, searchTerm]); // ✅ จะรันใหม่เมื่อ data หรือ searchTerm เปลี่ยน
+  }, [data, searchTerm]);
 
   // ---------------------------------------------------------------
-  // 🔹 Pagination logic
+  // 🔹 Pagination Logic
   // ---------------------------------------------------------------
-  const indexOfLast = currentPage * rowsPerPage; // index สุดท้ายของหน้า
-  const indexOfFirst = indexOfLast - rowsPerPage; // index แรกของหน้า
-  const currentData = filteredData.slice(indexOfFirst, indexOfLast); // ตัดข้อมูลเฉพาะหน้านั้น
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage); // จำนวนหน้าทั้งหมด
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
+  const indexOfLast = currentPage * rowsPerPage;
+  const indexOfFirst = indexOfLast - rowsPerPage;
+  const currentData = filteredData.slice(indexOfFirst, indexOfLast);
 
   // ---------------------------------------------------------------
-  // 🔹 ส่วนแสดงผลหลัก
+  // 🔹 Rendering UI
   // ---------------------------------------------------------------
   return (
     <div className="table-wrapper">
-      {/* 🔸 Header (Search + Add) */}
+      {/* ========================= Header ========================= */}
       <div className="table-header">
-        {/* กล่องค้นหา */}
+        {/* 🔍 ช่อง Search */}
         <div className="search-box">
           <input
             type="text"
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => {
-              setSearchTerm(e.target.value); // อัปเดตคำค้น
-              setCurrentPage(1); // กลับไปหน้าแรกเมื่อเปลี่ยนคำค้น
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // รีเซ็ตไปหน้าแรกเมื่อเปลี่ยนคำค้น
             }}
           />
         </div>
 
-        {/* 🔸 ปุ่ม Add แสดงเฉพาะถ้ามีฟังก์ชัน onAdd */}
+        {/* ➕ ปุ่ม Add (แสดงเฉพาะเมื่อมี onAdd ส่งมา) */}
         {onAdd && (
           <button className="add-button" onClick={onAdd}>
             +
@@ -65,63 +88,62 @@ export default function ComponentShow({ data, columns, onAdd, onEdit, onDelete }
         )}
       </div>
 
-      {/* 🔸 ตารางข้อมูล */}
+      {/* ========================= Table ========================= */}
       <table className="custom-table">
         <thead>
           <tr>
-            <th>NO</th>
-            {/* สร้างหัวตารางจาก columns props */}
+            <th>No</th>
+            {/* วนหัวคอลัมน์จาก columns ที่ส่งมา */}
             {columns.map((col, idx) => (
               <th key={idx}>{col.Header}</th>
             ))}
-            {/* 🔸 เงื่อนไข: แสดงเฉพาะเมื่อส่ง props มา */}
-            {onEdit && <th>EDIT</th>}
-            {onDelete && <th>DELETE</th>}
+            {onEdit && <th>Edit</th>}
+            {onDelete && <th>Delete</th>}
           </tr>
         </thead>
 
         <tbody>
-          {/* 🔸 ถ้ามีข้อมูล */}
+          {/* ✅ ถ้ามีข้อมูล */}
           {currentData.length > 0 ? (
             currentData.map((row, idx) => (
-              <tr key={row.id || idx}>
+              <tr key={row.id || row.HistoryID || idx}>
                 {/* ลำดับแถว */}
                 <td>{indexOfFirst + idx + 1}</td>
 
-                {/* วนแสดงค่าตาม columns ที่กำหนด */}
+                {/* ข้อมูลแต่ละคอลัมน์ */}
                 {columns.map((col, cIdx) => (
                   <td key={cIdx}>{row[col.accessor]}</td>
                 ))}
 
-                {/* 🔸 ปุ่ม Edit (มี cursor pointer เพิ่ม) */}
+                {/* ✏️ ปุ่ม Edit */}
                 {onEdit && (
                   <td className="action-icons">
                     <FiEdit
                       title="Edit"
                       onClick={() => onEdit(row)}
-                      style={{ cursor: "pointer" }} // ✅ เพิ่มมือชี้
+                      style={{ cursor: "pointer" }}
                     />
                   </td>
                 )}
 
-                {/* 🔸 ปุ่ม Delete (มี cursor pointer เพิ่ม) */}
+                {/* 🗑️ ปุ่ม Delete */}
                 {onDelete && (
                   <td className="action-icons">
                     <FiTrash2
                       title="Delete"
                       onClick={() => onDelete(row)}
-                      style={{ cursor: "pointer" }} // ✅ เพิ่มมือชี้
+                      style={{ cursor: "pointer" }}
                     />
                   </td>
                 )}
               </tr>
             ))
           ) : (
-            // 🔸 ถ้าไม่พบข้อมูล
+            // ❌ ถ้าไม่พบข้อมูล
             <tr>
               <td
                 colSpan={columns.length + (onEdit ? 1 : 0) + (onDelete ? 1 : 0) + 1}
-                style={{ textAlign: "center" }}
+                style={{ textAlign: "center", color: "#888" }}
               >
                 ❌ No results found
               </td>
@@ -130,7 +152,7 @@ export default function ComponentShow({ data, columns, onAdd, onEdit, onDelete }
         </tbody>
       </table>
 
-      {/* 🔸 Pagination Controls */}
+      {/* ========================= Pagination ========================= */}
       <div className="pagination">
         <button
           disabled={currentPage === 1}
@@ -140,7 +162,7 @@ export default function ComponentShow({ data, columns, onAdd, onEdit, onDelete }
         </button>
 
         <span>
-          Page {currentPage} of {totalPages || 1}
+          Page {currentPage} of {totalPages}
         </span>
 
         <button
@@ -149,6 +171,18 @@ export default function ComponentShow({ data, columns, onAdd, onEdit, onDelete }
         >
           Next &gt;
         </button>
+      </div>
+
+      {/* ========================= Footer Info ========================= */}
+      <div
+        style={{
+          textAlign: "center",
+          fontSize: "12px",
+          color: "#666",
+          marginTop: "5px",
+        }}
+      >
+        {/* Showing {currentData.length} / {filteredData.length} records */}
       </div>
     </div>
   );

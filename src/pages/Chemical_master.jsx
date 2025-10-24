@@ -22,7 +22,7 @@ export default function Chemical_master() {
         id: c.chemical_id,
         type: c.chemical_type,
         quantity: c.quantity,
-        unit: "g",
+        unit: "KG",
         expiry: c.expiry_date,
         tag: <ChemicalTagButton chemical={c} />,
         edit: (

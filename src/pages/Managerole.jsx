@@ -134,7 +134,12 @@ export default function Managerole() {
             <ComponentShow
               data={data}
               columns={columns}
-              onAdd={() => setShowAdd(true)}       // ✅ ใช้งาน Add
+              // onAdd={() => setShowAdd(true)}       // ✅ ใช้งาน Add
+              onAdd={async () => {
+  await fetchPositions(); // ✅ โหลดข้อมูลตำแหน่งใหม่จาก API ทุกครั้งก่อนเปิด AddDialog
+  setShowAdd(true);
+}}
+
               onEdit={(row) => setEditRow(row)}
               onDelete={(row) => setDeleteRow(row)}
             />

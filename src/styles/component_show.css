@@ -274,3 +274,17 @@
   transform: scale(1.2);           /* ขยายเล็กน้อยเมื่อ hover */
   color: #8d898d;                  /* เปลี่ยนสีเทาเข้มตอน hover */
 }
+/* ✅ ปรับเฉพาะหน้า History */
+.history-page .custom-table th,
+.history-page .custom-table td {
+  font-size: 13.5px;
+  padding: 3px 6px;
+}
+
+.history-page .pagination {
+  font-size: 13.5px;
+}
+
+.history-page .table-header input {
+  font-size: 13.5px;
+}

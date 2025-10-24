@@ -7,6 +7,7 @@ import { FiLogOut } from "react-icons/fi"; // ไอคอนออกจาก�
 // ✅ กำหนดเมนูทั้งหมดใน Sidebar
 const MENU = [
   { name: "Dashboard", page: "Page Dashboard", path: "/dashboard", children: [] },
+
   {
     name: "Chemical",
     page: "Page Chemical",
@@ -17,8 +18,12 @@ const MENU = [
       { name: "Destroy", page: "Page Chemical", path: "/chemical/destroy" },
     ],
   },
+
+
+
   { name: "Document", page: "Page Document", path: "/document", children: [] },
   { name: "Approve", page: "Page Approval", path: "/approve", children: [] },
+
   {
     name: "Admin Settings",
     page: "Page Admin",
@@ -27,6 +32,8 @@ const MENU = [
       { name: "Manage Role", page: "Page Admin", path: "/admin/roles" },
     ],
   },
+    // 🆕 ✅ เพิ่มเมนู History (เข้าได้ทุกคน ไม่ตรวจสิทธิ์)
+  { name: "History", path: "/history", children: [] },
 ];
 
 // ✅ Component หลักของ Sidebar
@@ -40,13 +47,12 @@ export default function Sidebar({ onLogout }) {
 
   // ✅ ฟังก์ชันสลับเปิด/ปิดเมนู
   const toggleMenu = (menuName) => {
-    // ถ้ากดเมนูเดิมซ้ำ → ปิด (พับ)
     setOpenMenu(openMenu === menuName ? null : menuName);
   };
 
-  // ✅ กรองเมนูตามสิทธิ์ผู้ใช้
+  // ✅ กรองเมนูตามสิทธิ์ผู้ใช้ (ยกเว้น History ที่เข้าได้ทุกคน)
   const filteredMenu = MENU.filter(
-    (item) => !item.page || permissions.includes(item.page)
+    (item) => !item.page || permissions.includes(item.page) || item.name === "History"
   ).map((item) => ({
     ...item,
     children: item.children.filter(
@@ -68,11 +74,9 @@ export default function Sidebar({ onLogout }) {
       <div className="sidebar-middle">
         <nav className="menu">
           {filteredMenu.map((item) => {
-            // ✅ เช็คว่า submenu ไหน active
             const isSubActive = item.children.some(
               (sub) => location.pathname === sub.path
             );
-            // ✅ เช็คว่าเมนูหลัก active ไหม
             const isMainActive = location.pathname === item.path;
 
             return (
@@ -80,18 +84,15 @@ export default function Sidebar({ onLogout }) {
                 {/* ===== กรณีมี Submenu ===== */}
                 {item.children.length > 0 ? (
                   <>
-                    {/* ปุ่มเมนูหลัก */}
                     <button
                       className={`menu-button ${
                         openMenu === item.name ? "is-active" : ""
                       }`}
                       onClick={() => toggleMenu(item.name)}
                     >
-                      {/* เปลี่ยนลูกศรแสดงสถานะเปิด/ปิด */}
                       {openMenu === item.name ? "▼" : "▶"} {item.name}
                     </button>
 
-                    {/* แสดงรายการ Submenu เมื่อเมนูนี้ถูกเปิด */}
                     {openMenu === item.name && (
                       <ul className="submenu">
                         {item.children.map((sub) => (
@@ -101,10 +102,9 @@ export default function Sidebar({ onLogout }) {
                               location.pathname === sub.path ? "is-active" : ""
                             }`}
                             onClick={() => {
-                              navigate(sub.path); // เมื่อคลิกให้เปลี่ยนหน้า
+                              navigate(sub.path);
                             }}
                           >
-                            {/* ลูกศรหน้า Submenu */}
                             {location.pathname === sub.path ? "▼" : "▶"} {sub.name}
                           </li>
                         ))}
@@ -116,8 +116,8 @@ export default function Sidebar({ onLogout }) {
                   <button
                     className={`menu-button ${isMainActive ? "is-active" : ""}`}
                     onClick={() => {
-                      navigate(item.path); // เปลี่ยนหน้า
-                      setOpenMenu(null); // ปิดเมนูอื่นเมื่อเปลี่ยนหน้า
+                      navigate(item.path);
+                      setOpenMenu(null);
                     }}
                   >
                     {item.name}
