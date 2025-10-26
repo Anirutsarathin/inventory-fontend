@@ -17,14 +17,22 @@ export default function History() {
         const res = await fetch("http://localhost:3000/api/chemicals/his");
         const result = await res.json();
 
-        if (!res.ok) throw new Error(result.error || "Failed to fetch chemical history");
+        if (!res.ok)
+          throw new Error(result.error || "Failed to fetch chemical history");
 
-        // ✅ แปลงวันที่ให้อ่านง่าย
+        // ✅ ฟังก์ชันแปลงวันที่ให้ตรง timezone ไทย
+        const formatDate = (dateString) => {
+          if (!dateString) return "-";
+          const date = new Date(dateString);
+          return date.toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" }); // YYYY-MM-DD
+        };
+
+        // ✅ แปลงข้อมูลและวันที่
         const mappedData = (result.history || []).map((item) => ({
           ...item,
-          ReceivedDate: new Date(item.ReceivedDate).toISOString().split("T")[0],
-          ExpiryDate: new Date(item.ExpiryDate).toISOString().split("T")[0],
-          create_date: new Date(item.create_date).toISOString().split("T")[0],
+          ReceivedDate: formatDate(item.ReceivedDate),
+          ExpiryDate: formatDate(item.ExpiryDate),
+          create_date: formatDate(item.create_date),
         }));
 
         setData(mappedData);
@@ -57,7 +65,9 @@ export default function History() {
     <div className="table-container history-page">
       <div className="rectangle">
         {loading ? (
-          <p style={{ textAlign: "center", marginTop: "30px" }}>⏳ กำลังโหลดข้อมูล...</p>
+          <p style={{ textAlign: "center", marginTop: "30px" }}>
+            ⏳ กำลังโหลดข้อมูล...
+          </p>
         ) : error ? (
           <p className="error">{error}</p>
         ) : (
