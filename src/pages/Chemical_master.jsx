@@ -1,70 +1,74 @@
 import { useState, useEffect } from "react";
 import ComponentShow from "../components/ComponentShow";
+import ChemicalTagButton from "../components/dialogs/chemical/ChemicalTagButton";
+import ChemicalEditButton from "../components/dialogs/chemical/ChemicalEditButton";
+import ChemicalDeleteDialog from "../components/dialogs/chemical/ChemicalDeleteButton"; // 👈 import ใหม่
 
 export default function Chemical_master() {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
+  const [selectedChemical, setSelectedChemical] = useState(null); // 👈 state สำหรับ Dialog
+
+  const fetchChemicals = async () => {
+    try {
+      const token = localStorage.getItem("auth_token");
+      const res = await fetch("http://localhost:3000/api/chemicals/all", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const result = await res.json();
+
+      const mappedData = (result.chemicals || []).map((c) => ({
+        name: c.chemical_name,
+        id: c.chemical_id,
+        type: c.chemical_type,
+        quantity: c.quantity,
+        unit: "KG",
+        expiry: c.expiry_date,
+        tag: <ChemicalTagButton chemical={c} />,
+        edit: (
+          <ChemicalEditButton
+            chemical={c}
+            onEdited={() => fetchChemicals()}
+          />
+        ),
+        delete: (
+          <button
+            onClick={() =>
+              setSelectedChemical({
+                chemical_id: c.chemical_id,
+                chemical_name: c.chemical_name,
+              })
+            }
+            style={{
+              background: "#d9534f",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              padding: "3px 8px",
+              cursor: "pointer",
+              fontSize: "13px",
+              fontWeight: "300",
+              transition: "0.2s",
+            }}
+            onMouseEnter={(e) => (e.target.style.background = "#c9302c")}
+            onMouseLeave={(e) => (e.target.style.background = "#d9534f")}
+          >
+            Delete
+          </button>
+        ),
+      }));
+
+      setData(mappedData);
+    } catch (err) {
+      console.error("Fetch chemicals error:", err);
+      setError("Server error, please try again later.");
+    }
+  };
 
   useEffect(() => {
-    const fetchChemicals = async () => {
-      try {
-        const token = localStorage.getItem("auth_token");
-        if (!token) {
-          setError("No token found, please login.");
-          return;
-        }
-
-        const res = await fetch("http://localhost:3000/api/chemicals/all", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) {
-          const errData = await res.json();
-          setError(errData.error || "Failed to fetch chemicals");
-          return;
-        }
-
-        const result = await res.json();
-
-        // ✅ Map API → Table format
-        const mappedData = (result.chemicals || []).map((c) => ({
-          name: c.chemical_name,
-          id: c.chemical_id,
-          type: c.chemical_type,
-          quantity: c.quantity,
-          unit: "g", // 👈 default unit
-                    tag: (
-            <button
-              onClick={() => alert(`QR for ${c.chemical_id}`)}
-              style={{
-                padding: "2px 2px",
-                background: "#f497b6",
-                color: "#fff",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-            >
-              QR
-            </button>
-          ),
-          expiry: c.expiry_date,
-        }));
-
-        setData(mappedData);
-      } catch (err) {
-        console.error("Fetch chemicals error:", err);
-        setError("Server error, please try again later.");
-      }
-    };
-
     fetchChemicals();
   }, []);
 
-  // ✅ กำหนด columns สำหรับ Table
   const columns = [
     { Header: "Name", accessor: "name" },
     { Header: "Id", accessor: "id" },
@@ -73,6 +77,8 @@ export default function Chemical_master() {
     { Header: "Unit", accessor: "unit" },
     { Header: "Expiry", accessor: "expiry" },
     { Header: "Tag", accessor: "tag" },
+    { Header: "Edit", accessor: "edit" },
+    { Header: "Delete", accessor: "delete" },
   ];
 
   return (
@@ -81,7 +87,24 @@ export default function Chemical_master() {
         {error ? (
           <p className="error">{error}</p>
         ) : (
-          <ComponentShow data={data} columns={columns} />
+          <>
+            <ComponentShow data={data} columns={columns} />
+            {/* 🔹 Dialog แสดงเมื่อเลือกสารเคมี */}
+            {selectedChemical && (
+              <ChemicalDeleteDialog
+                row={selectedChemical}
+                onClose={() => setSelectedChemical(null)}
+                onConfirm={async (id) => {
+                  const token = localStorage.getItem("auth_token");
+                  await fetch(`http://localhost:3000/api/chemicals/${id}`, {
+                    method: "DELETE",
+                    headers: { Authorization: `Bearer ${token}` },
+                  });
+                  fetchChemicals();
+                }}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

@@ -1,216 +1,290 @@
-/* ===== Container หลัก ===== */
+/* ===========================================================
+   🌸 ส่วนจัดวาง Container หลักของตารางทั้งหมด
+   =========================================================== */
 .table-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  margin-top: 0px;
+  display: flex;                   /* ใช้ Flexbox เพื่อจัดเรียงภายใน */
+  justify-content: center;         /* จัดให้อยู่กึ่งกลางแนวนอน */
+  align-items: flex-start;         /* จัดให้อยู่ด้านบนแนวตั้ง */
+  width: 100%;                     /* กินเต็มความกว้างของจอ */
+  margin-top: 0px;                 /* ไม่มีช่องว่างด้านบน */
 }
 
+/* 🔲 กล่องสี่เหลี่ยมหลักที่ครอบทุกอย่างในหน้า */
 .rectangle {
-  width: 90%;              /* ⬅️ เดิม 60% → เพิ่มเป็น 90% ของจอ */
-  height: 700px;           /* ⬅️ เดิม 500px → เพิ่มความสูง */
-  background: #f497b6;
-  padding: 0;
-  border-radius: 6px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  width: 90%;                      /* กำหนดให้กินพื้นที่ 90% ของจอ (responsive) */
+  height: 700px;                   /* ความสูงของกล่องหลัก */
+  background: #f497b6;             /* สีพื้นหลังชมพูอ่อน (theme หลัก) */
+  padding: 0;                      /* ไม่ให้มี padding ด้านใน */
+  border-radius: 6px;              /* มุมโค้งเล็กน้อย */
+  overflow: hidden;                /* ซ่อนส่วนเกิน */
+  display: flex;                   /* ใช้ flex เพื่อจัด layout ภายใน */
+  flex-direction: column;          /* เรียงลูกจากบนลงล่าง */
 }
 
-/* ===== กล่อง Table ===== */
+/* ===========================================================
+   🧾 ส่วนกล่อง Table Wrapper
+   =========================================================== */
 .table-wrapper {
-  flex: 1;
-  margin: 8px;
-  background: #fff;
-  border-radius: 6px;
-  display: flex;
+  flex: 1;                         /* ขยายเต็มพื้นที่ที่เหลือใน container */
+  margin: 8px;                     /* มีช่องว่างรอบนอกเล็กน้อย */
+  background: #fff;                /* พื้นหลังสีขาว เพื่อแยกจากพื้นหลังชมพู */
+  border-radius: 6px;              /* มุมโค้งนุ่มนวล */
+  display: flex;                   /* ใช้ flex สำหรับจัดเรียงแนวตั้ง */
   flex-direction: column;
-  padding: 15px;            /* ⬅️ เพิ่ม padding ให้โปร่งขึ้น */
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  padding: 15px;                   /* เพิ่มช่องว่างรอบในให้ดูโปร่ง */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1); /* เงาเบาๆ สร้างมิติ */
 }
 
-/* ===== Header (Search Box) ===== */
+/* ===========================================================
+   🔍 ส่วน Header (Search Box + Add Button)
+   =========================================================== */
 .table-header {
-  display: flex;
-  justify-content: space-between; /* ซ้าย-ขวา */
-  align-items: center;
-  margin-bottom: 10px;
+  display: flex;                   /* วาง search กับปุ่ม add บนแถวเดียวกัน */
+  justify-content: space-between;  /* ด้านซ้ายเป็น search, ขวาเป็นปุ่ม add */
+  align-items: center;             /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+  margin-bottom: 10px;             /* เว้นระยะก่อนถึงตาราง */
 }
+
+/* 🎯 ช่องค้นหา */
 .search-box input {
-  padding: 8px 14px;        /* ⬅️ เพิ่ม padding */
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;          /* ⬅️ ขยาย font */
-  width: 250px;             /* ⬅️ เพิ่มความกว้างกล่อง search */
-  transition: all 0.2s ease;
+  padding: 8px 14px;               /* ขนาดช่องค้นหากว้างและสูงพอดี */
+  border: 1px solid #ccc;          /* เส้นขอบเทาอ่อน */
+  border-radius: 8px;              /* มุมโค้งมน */
+  font-size: 14px;                 /* ขนาดตัวอักษรในช่องค้นหา */
+  width: 250px;                    /* ความกว้างของช่องค้นหา */
+  transition: all 0.2s ease;       /* เพิ่ม animation เวลา focus */
 }
 
+/* ✨ เอฟเฟกต์เมื่อ focus ที่ช่องค้นหา */
 .search-box input:focus {
-  outline: none;
-  border-color: #f497b6;
-  box-shadow: 0 0 6px rgba(244, 151, 182, 0.5);
+  outline: none;                   /* เอาเส้น outline ออก */
+  border-color: #f497b6;           /* เปลี่ยนสีขอบเป็นชมพู */
+  box-shadow: 0 0 6px rgba(244, 151, 182, 0.5); /* แสงชมพูจางรอบช่อง */
 }
 
-/* ===== ตาราง ===== */
+/* ===========================================================
+   📊 ตารางข้อมูลหลัก
+   =========================================================== */
 .custom-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 15px;          /* ⬅️ เดิม 13px → ใหญ่ขึ้น */
-  background: white;
+  width: 100%;                     /* กินเต็มพื้นที่ภายใน */
+  border-collapse: collapse;       /* รวมเส้นขอบไม่ให้ซ้อนกัน */
+  font-size: 15px;                 /* ขนาดตัวอักษรอ่านง่าย */
+  background: white;               /* สีพื้นหลังของตาราง */
 }
 
+/* 🧱 หัวตาราง (th) */
 .custom-table th {
-  background: #f497b6;
-  color: white;
-  padding: 12px;            /* ⬅️ เดิม 8px */
-  text-align: left;
-  font-size: 15px;          /* ⬅️ ใหญ่ขึ้น */
+  background: #f497b6;             /* พื้นหลังชมพู */
+  color: white;                    /* ตัวอักษรสีขาวตัดกัน */
+  padding: 12px;                   /* เพิ่มพื้นที่ช่องใน */
+  text-align: left;                /* จัดข้อความชิดซ้าย */
+  font-size: 15px;                 /* ขนาดตัวอักษรหัวตาราง */
 }
 
+/* 🔹 ช่องข้อมูลในแต่ละแถว (td) */
 .custom-table td {
-  padding: 12px;            /* ⬅️ เดิม 8px */
-  border: 1px solid #eee;
+  padding: 12px;                   /* ระยะห่างภายในช่อง */
+  border: 1px solid #eee;          /* เส้นขอบสีเทาอ่อน */
 }
 
+/* 🩷 เอฟเฟกต์เมื่อ hover บนแถว */
 .custom-table tr:hover {
-  background: #fde2e4;
+  background: #fde2e4;             /* เปลี่ยนเป็นสีชมพูอ่อน */
 }
 
-/* ===== Pagination ===== */
+/* ===========================================================
+   🔢 Pagination (ปุ่มเปลี่ยนหน้า)
+   =========================================================== */
 .pagination {
-  margin-top: auto;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  font-size: 14px;          /* ⬅️ เดิม 13px */
-  padding: 10px 0;          /* ⬅️ เดิม 8px */
-  background: #fff;
-  border-top: 1px solid #eee;
+  margin-top: auto;                /* ดันให้ pagination ไปอยู่ล่างสุดของ flex */
+  text-align: center;              /* จัดข้อความให้อยู่กึ่งกลาง */
+  display: flex;                   /* ใช้ flex สำหรับจัดปุ่ม */
+  justify-content: center;         /* จัดให้อยู่ตรงกลางแนวนอน */
+  gap: 12px;                       /* ช่องว่างระหว่างปุ่ม */
+  font-size: 14px;                 /* ขนาดข้อความ */
+  padding: 10px 0;                 /* ช่องว่างบนล่าง */
+  background: #fff;                /* พื้นหลังสีขาว */
+  border-top: 1px solid #eee;      /* เส้นแบ่งบนสุด */
 }
 
+/* 🔘 ปุ่ม pagination */
 .pagination button {
-  padding: 6px 12px;        /* ⬅️ ใหญ่ขึ้น */
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  padding: 6px 12px;               /* ขนาดปุ่มกว้างและสูง */
+  border: 1px solid #ccc;          /* ขอบเทา */
+  background: #fff;                /* พื้นหลังขาว */
+  cursor: pointer;                 /* เปลี่ยนเมาส์เป็นมือชี้ */
+  border-radius: 4px;              /* มุมโค้งเล็กน้อย */
+  transition: all 0.2s ease;       /* เพิ่ม animation เวลา hover */
 }
 
+/* 🌸 เอฟเฟกต์เมื่อ hover ปุ่ม (ยกเว้น disabled) */
 .pagination button:hover:not(:disabled) {
-  background: #f497b6;
-  color: #fff;
+  background: #f497b6;             /* พื้นหลังชมพู */
+  color: #fff;                     /* ตัวอักษรสีขาว */
 }
 
+/* 🚫 ปุ่มที่ถูกปิดใช้งาน */
 .pagination button:disabled {
-  background: #eee;
-  cursor: not-allowed;
+  background: #eee;                /* พื้นหลังเทาอ่อน */
+  cursor: not-allowed;             /* เมาส์เป็นห้ามคลิก */
 }
 
-/* ปุ่ม Add */
+/* ===========================================================
+   ➕ ปุ่ม Add ข้อมูล
+   =========================================================== */
 .add-button {
-  padding: 6px 14px;
-  background: #278b3d;   /* เขียว */
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  padding: 6px 14px;               /* ขนาดปุ่ม */
+  background: #278b3d;             /* เขียวเข้ม (สีหลักของปุ่มเพิ่ม) */
+  color: white;                    /* ตัวอักษรขาว */
+  border: none;                    /* ไม่มีเส้นขอบ */
+  border-radius: 6px;              /* มุมโค้งมน */
+  font-size: 18px;                 /* ขนาดใหญ่เล็กน้อย */
+  font-weight: bold;               /* ตัวหนา */
+  cursor: pointer;                 /* มือชี้เมื่อ hover */
+  transition: background 0.2s ease;/* ทำให้เปลี่ยนสีเรียบ */
 }
 
+/* 💚 เอฟเฟกต์ hover ปุ่ม Add */
 .add-button:hover {
-  background: #96dfa4;   /* เขียวเข้มเวลา hover */
-}
-/* --------------Chemical_stock----------- */
-.form-chemical {
-  display: flex;
-  flex-direction: column;
-  gap: 5px; /* ระยะห่างระหว่าง input แต่ละอัน */
-  padding: 0px 100px; /* ✅ ขยับเข้ามา ไม่ติดขอบ */
+  background: #96dfa4;             /* เขียวอ่อนขึ้นเมื่อ hover */
 }
 
+/* ===========================================================
+   🧪 ส่วนฟอร์ม Chemical (สำหรับเพิ่ม/แก้ไขข้อมูล)
+   =========================================================== */
+.form-chemical {
+  display: flex;                   /* จัดเรียงแบบคอลัมน์ */
+  flex-direction: column;
+  gap: 5px;                        /* ระยะห่างระหว่าง input แต่ละช่อง */
+  padding: 0px 100px;              /* ขยับเข้ามาจากขอบ */
+}
+
+/* Label ของ input */
 .form-chemical label {
   display: flex;
   flex-direction: column;
-  font-size: 18px;   /* ✅ ขยายตัวอักษร label */
-  font-weight: 600;
-  color: #333;
+  font-size: 18px;                 /* ขยายขนาดตัวอักษร */
+  font-weight: 600;                /* ตัวหนาเล็กน้อย */
+  color: #333;                     /* สีเทาเข้มอ่านง่าย */
 }
 
+/* ช่อง input */
 .form-chemical input {
-  padding: 10px 12px;       /* ✅ ช่อง input ใหญ่ขึ้น */
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 10px 12px;              /* ขนาดช่องพอดีมือ */
+  border: 1px solid #ccc;          /* ขอบเทาอ่อน */
+  border-radius: 6px;              /* มุมโค้งมน */
   margin-top: 1px;
-  font-size: 14px;          /* ✅ ตัวอักษรใน input ใหญ่ขึ้น */
+  font-size: 14px;                 /* ตัวอักษรใน input */
 }
 
+/* ปุ่ม Submit */
 .submit-btn {
-  margin-top: 10px;
-  padding: 14px 20px;     /* ✅ ขยายพื้นที่ปุ่ม */
-  font-size: 18px;        /* ✅ ขยายขนาดตัวอักษร */
-  background: #28a745;
+  margin-top: 10px;                /* เว้นระยะจาก input */
+  padding: 14px 20px;              /* พื้นที่ในปุ่ม */
+  font-size: 18px;                 /* ขนาดตัวอักษรใหญ่ */
+  background: #28a745;             /* เขียวเข้มแบบ success */
   color: white;
   border: none;
-  border-radius: 8px;     /* ✅ มุมโค้งใหญ่ขึ้นนิดหน่อย */
+  border-radius: 8px;              /* มุมโค้งมนสวย */
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s;
-  width: 100%;            /* ✅ กินเต็มแถว */
-  max-width: 400px;       /* ✅ จำกัดไม่ให้กว้างเกินไป */
-  align-self: center;     /* ✅ จัดตรงกลางฟอร์ม */
+  width: 100%;                     /* ขนาดเต็มบรรทัด */
+  max-width: 400px;                /* จำกัดความกว้างสูงสุด */
+  align-self: center;              /* จัดปุ่มให้อยู่กึ่งกลางฟอร์ม */
 }
+
+/* เอฟเฟกต์ hover ปุ่ม submit */
 .submit-btn:hover {
-  background: #218838;
+  background: #218838;             /* เขียวเข้มขึ้น */
 }
+
+/* ===========================================================
+   🧩 ปรับ SweetAlert Popup ตำแหน่ง (custom)
+   =========================================================== */
 .my-swal-popup {
   position: absolute !important;
-  top: 0%;     /* 👈 ปรับเองได้ */
-  right: 30%;  /* 👈 ปรับเองได้ */
+  top: 0%;                         /* ปรับตำแหน่งแนวตั้ง */
+  right: 30%;                      /* ปรับตำแหน่งแนวนอน */
 }
+
 .my-swal-popuprole {
   position: absolute !important;
-  top: -20%;     /* 👈 ปรับเองได้ */
-  right: 29.8%;  /* 👈 ปรับเองได้ */
+  top: -20%;                       /* ยกขึ้นเล็กน้อย */
+  right: 29.8%;
 }
+
+/* ===========================================================
+   📋 ฟอร์ม Select (Dropdown)
+   =========================================================== */
 .form-chemical select {
-  padding: 10px 12px;      /* ✅ เพิ่มความสูงเหมือน input */
+  padding: 10px 12px;              /* เพิ่มพื้นที่ใน select */
   border: 1px solid #ccc;
   border-radius: 6px;
   margin-top: 6px;
-  font-size: 17px;         /* ✅ ขยายขนาดตัวอักษร */
-  background-color: #fff;  /* ✅ ให้ select เป็นพื้นขาว */
-  cursor: pointer;
+  font-size: 17px;
+  background-color: #fff;          /* สีพื้นหลังขาว */
+  cursor: pointer;                 /* เมาส์เป็นมือชี้ */
 }
+
+/* ===========================================================
+   🪟 กล่อง Dialog (Overlay & Box)
+   =========================================================== */
 .dialog-overlay {
-  position: fixed;
+  position: fixed;                 /* ครอบเต็มจอ */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.5);     /* พื้นหลังโปร่งแสงดำ */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center;         /* จัดให้อยู่กลางแนวนอน */
+  align-items: center;             /* จัดให้อยู่กลางแนวตั้ง */
 }
 
+/* กล่องเนื้อหา dialog */
 .dialog-box {
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 400px;                    /* ขนาดกล่องมาตรฐาน */
 }
 
+/* ระยะห่างของแต่ละ field */
 .form-group {
   margin-bottom: 10px;
 }
 
+/* ปุ่มใน dialog */
 .dialog-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  justify-content: flex-end;       /* ปุ่มอยู่ขวา */
+  gap: 10px;                       /* ระยะห่างระหว่างปุ่ม */
+}
+
+/* ===========================================================
+   ✏️ ปุ่ม Icon Edit / Delete (action-icons)
+   =========================================================== */
+.action-icons svg {
+  transition: transform 0.15s ease, color 0.15s ease; /* ทำให้มี animation */
+}
+
+/* เอฟเฟกต์เมื่อ hover icon */
+.action-icons svg:hover {
+  transform: scale(1.2);           /* ขยายเล็กน้อยเมื่อ hover */
+  color: #8d898d;                  /* เปลี่ยนสีเทาเข้มตอน hover */
+}
+/* ✅ ปรับเฉพาะหน้า History */
+.history-page .custom-table th,
+.history-page .custom-table td {
+  font-size: 13.5px;
+  padding: 3px 6px;
+}
+
+.history-page .pagination {
+  font-size: 13.5px;
+}
+
+.history-page .table-header input {
+  font-size: 13.5px;
 }
